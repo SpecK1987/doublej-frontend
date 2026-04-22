@@ -13,6 +13,7 @@ import AdminLogin from "./pages/admin/Login";
 import AdminOrders from "./pages/admin/Orders";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Profile from "./pages/portal/Profile";
+import SavedLocations from "./pages/portal/SavedLocations";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -53,6 +54,12 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
              <ProtectedRoute>
                 <Profile />
              </ProtectedRoute>
+           }
+          />
+           <Route path="/portal/locations" element={
+            <ProtectedRoute>
+                <SavedLocations />
+            </ProtectedRoute>
            }
           />
         </Routes>
