@@ -49,6 +49,8 @@ export default function PortalLogin() {
         >
           Login
         </button>
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.user.role);
       </div>
     </div>
   );
