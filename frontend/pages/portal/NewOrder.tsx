@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { API, authHeader } from "../../utils/api";
 
-export default function NewOrderWizard() {
+export default function NewOrder() {
   const [step, setStep] = useState(1);
 
   const [pickupLocation, setPickup] = useState("");
@@ -8,7 +9,18 @@ export default function NewOrderWizard() {
   const [goodsType, setGoodsType] = useState("");
   const [specialNotes, setNotes] = useState("");
 
+  const [savedLocations, setSavedLocations] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // Load saved delivery locations
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(`${API}/api/locations`, {
+        headers: authHeader(),
+      });
+      setSavedLocations(await res.json());
+    })();
+  }, []);
 
   const next = () => setStep((s) => s + 1);
   const back = () => setStep((s) => s - 1);
@@ -17,18 +29,18 @@ export default function NewOrderWizard() {
     setLoading(true);
     const token = localStorage.getItem("token");
 
-    await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+    await fetch(`${API}/api/orders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         pickupLocation,
         deliveryLocation,
         goodsType,
-        specialNotes
-      })
+        specialNotes,
+      }),
     });
 
     setLoading(false);
@@ -39,7 +51,7 @@ export default function NewOrderWizard() {
     <div className="min-h-screen bg-lightgrey py-10 px-4">
       <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-8">
 
-        {/* PROGRESS INDICATOR */}
+        {/* PROGRESS BAR */}
         <div className="flex justify-between mb-8">
           {[1, 2, 3].map((n) => (
             <div
@@ -62,6 +74,31 @@ export default function NewOrderWizard() {
               Step 1: Pickup & Delivery
             </h2>
 
+            {/* Saved Locations Dropdown */}
+            <label className="block mb-4">
+              <span className="text-sm font-medium text-gray-700">
+                Use Saved Location
+              </span>
+              <select
+                className="w-full p-3 border rounded mt-1 bg-white"
+                onChange={(e) => {
+                  const idx = Number(e.target.value);
+                  if (!Number.isNaN(idx)) {
+                    const loc = savedLocations[idx];
+                    setDelivery(`${loc.label} - ${loc.location}`);
+                  }
+                }}
+              >
+                <option value="">Select saved location</option>
+                {savedLocations.map((loc, i) => (
+                  <option key={i} value={i}>
+                    {loc.type}: {loc.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            {/* Pickup Location */}
             <label className="block mb-4">
               <span className="text-sm font-medium text-gray-700">
                 Pickup Location
@@ -74,6 +111,7 @@ export default function NewOrderWizard() {
               />
             </label>
 
+            {/* Delivery Location */}
             <label className="block mb-4">
               <span className="text-sm font-medium text-gray-700">
                 Delivery Location
@@ -105,6 +143,7 @@ export default function NewOrderWizard() {
               Step 2: Goods Information
             </h2>
 
+            {/* Goods Type */}
             <label className="block mb-4">
               <span className="text-sm font-medium text-gray-700">
                 Type of Goods
@@ -121,6 +160,7 @@ export default function NewOrderWizard() {
               </select>
             </label>
 
+            {/* Notes */}
             <label className="block">
               <span className="text-sm font-medium text-gray-700">
                 Special Notes (Optional)
