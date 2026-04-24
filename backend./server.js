@@ -16,16 +16,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ROUTES
 app.use("/api/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/locations", locationRoutes);
 
-// ROOT TEST ROUTE
 app.get("/", (req, res) => {
   res.send("Double J Gulf Services API is running");
 });
 
-// START SERVER
-app.listen(5000, () => console.log("Server running on port 5000"));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
