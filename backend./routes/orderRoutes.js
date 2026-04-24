@@ -4,14 +4,13 @@ import Order from "../models/Order.js";
 
 const router = express.Router();
 
-// CREATE ORDER
+// Create order
 router.post("/", auth, async (req, res) => {
   try {
     const order = await Order.create({
       ...req.body,
-      customerId: req.user.id,
+      customerId: req.user.id
     });
-
     res.json(order);
   } catch (err) {
     console.error("Error creating order:", err);
@@ -19,11 +18,10 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-// GET CUSTOMER ORDERS (with filters)
+// Get customer orders with filters
 router.get("/", auth, async (req, res) => {
   try {
     const { status, search } = req.query;
-
     const query = { customerId: req.user.id };
 
     if (status && status !== "all") {
@@ -35,7 +33,6 @@ router.get("/", auth, async (req, res) => {
     }
 
     const orders = await Order.find(query).sort({ createdAt: -1 });
-
     res.json(orders);
   } catch (err) {
     console.error("Error fetching orders:", err);
@@ -43,7 +40,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// ADMIN: GET ALL ORDERS
+// Admin: get all orders
 router.get("/admin/all", auth, async (req, res) => {
   try {
     if (req.user.role !== "admin") {
@@ -58,18 +55,16 @@ router.get("/admin/all", auth, async (req, res) => {
   }
 });
 
-// ADMIN: UPDATE ORDER STATUS
+// Admin: update order
 router.patch("/:id", auth, async (req, res) => {
   try {
     if (req.user.role !== "admin") {
       return res.status(403).json({ msg: "Forbidden" });
     }
 
-    const order = await Order.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
+    const order = await Order.findByIdAndUpdate(req.params.id, req.body, {
+      new: true
+    });
 
     res.json(order);
   } catch (err) {
