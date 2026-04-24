@@ -1,12 +1,6 @@
-export const API = import.meta.env.VITE_API_URL;
+export const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-export const authHeader = () => ({
-  Authorization: `Bearer ${localStorage.getItem("token")}`
-});
-
-const res = await fetch(`${API}/api/orders`, {
-  headers: {
-    "Content-Type": "application/json",
-    ...authHeader()
-  }
-});
+export const authHeader = () => {
+  const token = localStorage.getItem("token");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
