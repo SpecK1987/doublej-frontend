@@ -6,20 +6,20 @@ export default function Profile() {
     name: "",
     company: "",
     phone: "",
-    defaultInstructions: "",
+    defaultInstructions: ""
   });
 
   useEffect(() => {
     (async () => {
       const res = await fetch(`${API}/api/profile/me`, {
-        headers: authHeader(),
+        headers: authHeader()
       });
       const data = await res.json();
       setForm({
         name: data.name || "",
         company: data.company || "",
         phone: data.phone || "",
-        defaultInstructions: data.defaultInstructions || "",
+        defaultInstructions: data.defaultInstructions || ""
       });
     })();
   }, []);
@@ -28,7 +28,7 @@ export default function Profile() {
     await fetch(`${API}/api/profile/me`, {
       method: "PUT",
       headers: { "Content-Type": "application/json", ...authHeader() },
-      body: JSON.stringify(form),
+      body: JSON.stringify(form)
     });
     alert("Profile updated");
   };
