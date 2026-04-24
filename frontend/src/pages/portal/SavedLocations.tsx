@@ -12,7 +12,7 @@ export default function SavedLocations() {
   const [form, setForm] = useState<SavedLocation>({
     label: "",
     type: "",
-    location: "",
+    location: ""
   });
 
   const load = async () => {
@@ -28,7 +28,7 @@ export default function SavedLocations() {
     await fetch(`${API}/api/locations`, {
       method: "POST",
       headers: { "Content-Type": "application/json", ...authHeader() },
-      body: JSON.stringify(form),
+      body: JSON.stringify(form)
     });
     setForm({ label: "", type: "", location: "" });
     load();
@@ -37,7 +37,7 @@ export default function SavedLocations() {
   const remove = async (index: number) => {
     await fetch(`${API}/api/locations/${index}`, {
       method: "DELETE",
-      headers: authHeader(),
+      headers: authHeader()
     });
     load();
   };
@@ -54,12 +54,16 @@ export default function SavedLocations() {
             className="p-2 border rounded"
             placeholder="Label (e.g. M/V Gulf Runner)"
             value={form.label}
-            onChange={(e) => setForm((f) => ({ ...f, label: e.target.value }))}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, label: e.target.value }))
+            }
           />
           <select
             className="p-2 border rounded"
             value={form.type}
-            onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, type: e.target.value }))
+            }
           >
             <option value="">Type</option>
             <option>Boat</option>
@@ -103,6 +107,9 @@ export default function SavedLocations() {
             </button>
           </li>
         ))}
+        {locations.length === 0 && (
+          <p className="text-sm text-gray-500">No saved locations yet.</p>
+        )}
       </ul>
     </div>
   );
