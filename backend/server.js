@@ -22,8 +22,8 @@ app.use(
 );
 
 // ROUTES
-import authRoutes from "./routes/auth.js";
-import orderRoutes from "./routes/orders.js";
+import authRoutes from "./routes/authRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 app.use("/api/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
