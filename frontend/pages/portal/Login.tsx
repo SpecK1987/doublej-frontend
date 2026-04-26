@@ -1,57 +1,56 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { API } from "../../utils/api";
 
 export default function PortalLogin() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [form, setForm] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await res.json();
-      if (!res.ok) return setError(data.msg);
-
-      localStorage.setItem("token", data.token);
-      window.location.href = "/portal/orders";
-    } catch {
-      setError("Server error");
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await fetch(`${API}/api/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form)
+    });
+    if (!res.ok) {
+      alert("Login failed");
+      return;
     }
+    const data = await res.json();
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("role", data.user.role);
+    navigate("/portal/orders");
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-lightgrey">
-      <div className="bg-white p-8 rounded shadow-md w-96">
-        <h1 className="text-2xl font-bold text-navy mb-4">Customer Login</h1>
-
-        {error && <p className="text-red-500 mb-2">{error}</p>}
-
+    <div className="max-w-md mx-auto px-4 py-10">
+      <h1 className="text-2xl font-bold text-navy mb-4">Customer Login</h1>
+      <form onSubmit={submit} className="bg-white rounded-lg shadow p-6 space-y-4">
         <input
-          className="w-full p-2 border mb-3"
+          className="w-full p-3 border rounded"
           placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
+          value={form.email}
+          onChange={(e) =>
+            setForm((f) => ({ ...f, email: e.target.value }))
+          }
         />
-
         <input
-          className="w-full p-2 border mb-3"
+          className="w-full p-3 border rounded"
           placeholder="Password"
           type="password"
-          onChange={(e) => setPassword(e.target.value)}
+          value={form.password}
+          onChange={(e) =>
+            setForm((f) => ({ ...f, password: e.target.value }))
+          }
         />
-
         <button
-          onClick={handleLogin}
-          className="w-full bg-primary text-navy py-2 rounded font-bold"
+          type="submit"
+          className="w-full bg-primary text-navy px-5 py-2 rounded font-semibold"
         >
           Login
         </button>
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("role", data.user.role);
-      </div>
+      </form>
     </div>
   );
 }
