@@ -1,5 +1,5 @@
 import express from "express";
-import auth from "../middleware/authMiddleware.js";
+import { protect, adminOnly } from "../middleware/authMiddleware.js";
 import Order from "../models/Order.js";
 
 const router = express.Router();
