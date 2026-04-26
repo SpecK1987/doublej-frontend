@@ -1,46 +1,74 @@
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { Helmet } from "react-helmet-async";
 
 export default function Services() {
   return (
-    <div className="bg-lightgrey min-h-screen flex flex-col">
-      <Navbar />
+    <>
+      <Helmet>
+        <title>Services | Double J Gulf Services</title>
+        <meta
+          name="description"
+          content="Storage, packaging, and delivery services for boats, platforms, and local businesses across the Gulf."
+        />
+      </Helmet>
 
-      <main className="flex-1 max-w-5xl mx-auto px-4 py-10">
-        <h1 className="text-3xl font-bold text-navy mb-6">Our Services</h1>
+      <div className="max-w-5xl mx-auto px-4 py-10">
+        <h1 className="text-3xl font-bold text-navy mb-4">Our Services</h1>
+        <p className="text-sm text-gray-700 mb-8">
+          Double J Gulf Services is focused on the realities of Gulf logistics:
+          tight windows, changing conditions, and crews that can’t afford
+          delays. We provide storage, packaging, and delivery of groceries,
+          household products, and specialty items to boats, platforms, and local
+          businesses.
+        </p>
 
-        {[
-          {
-            title: "Storage",
-            text1:
-              "Secure, organized storage for groceries, household products, and specialty items.",
-            text2:
-              "We maintain clear labeling, rotation, and handling practices for operational readiness.",
-          },
-          {
-            title: "Packaging",
-            text1:
-              "Marine- and oilfield-ready packaging to protect goods during transport.",
-            text2:
-              "From bulk provisions to specialty items, we prepare loads for efficient transfer.",
-          },
-          {
-            title: "Delivery",
-            text1:
-              "Coordinated delivery to boats, platforms, and local businesses across the Gulf.",
-            text2:
-              "We align delivery windows with vessel movements and site access requirements.",
-          },
-        ].map((s) => (
-          <section key={s.title} className="mb-8 bg-white p-6 rounded shadow-sm">
-            <h2 className="text-xl font-semibold text-navy mb-2">{s.title}</h2>
-            <p className="text-sm text-gray-800 mb-2">{s.text1}</p>
-            <p className="text-sm text-gray-700">{s.text2}</p>
-          </section>
-        ))}
-      </main>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-lg shadow p-5">
+            <h2 className="font-semibold text-navy mb-2">
+              Storage & Packaging
+            </h2>
+            <p className="text-sm text-gray-700">
+              Secure storage and organized packaging to keep orders accurate and
+              ready for fast dispatch.
+            </p>
+          </div>
+          <div className="bg-white rounded-lg shadow p-5">
+            <h2 className="font-semibold text-navy mb-2">
+              Boat & Platform Delivery
+            </h2>
+            <p className="text-sm text-gray-700">
+              Coordinated deliveries to crew boats, supply vessels, and
+              platforms with clear timing and communication.
+            </p>
+          </div>
+          <div className="bg-white rounded-lg shadow p-5">
+            <h2 className="font-semibold text-navy mb-2">
+              Local Business Support
+            </h2>
+            <p className="text-sm text-gray-700">
+              Delivery support for local yards, docks, and businesses that need
+              reliable, repeat service.
+            </p>
+          </div>
+          <div className="bg-white rounded-lg shadow p-5">
+            <h2 className="font-semibold text-navy mb-2">
+              Specialty & Bulk Items
+            </h2>
+            <p className="text-sm text-gray-700">
+              Handling of specialty items and bulk orders with attention to
+              safety and handling requirements.
+            </p>
+          </div>
+        </div>
 
-      <Footer />
-    </div>
+        <div className="mt-8">
+          <a
+            href="/contact"
+            className="bg-primary text-navy px-5 py-2 rounded font-semibold"
+          >
+            Request a Quote
+          </a>
+        </div>
+      </div>
+    </>
   );
 }
