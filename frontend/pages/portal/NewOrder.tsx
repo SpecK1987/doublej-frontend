@@ -12,11 +12,10 @@ export default function NewOrder() {
   const [savedLocations, setSavedLocations] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Load saved delivery locations
   useEffect(() => {
     (async () => {
       const res = await fetch(`${API}/api/locations`, {
-        headers: authHeader(),
+        headers: authHeader()
       });
       setSavedLocations(await res.json());
     })();
@@ -33,14 +32,14 @@ export default function NewOrder() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         pickupLocation,
         deliveryLocation,
         goodsType,
-        specialNotes,
-      }),
+        specialNotes
+      })
     });
 
     setLoading(false);
@@ -50,8 +49,6 @@ export default function NewOrder() {
   return (
     <div className="min-h-screen bg-lightgrey py-10 px-4">
       <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-8">
-
-        {/* PROGRESS BAR */}
         <div className="flex justify-between mb-8">
           {[1, 2, 3].map((n) => (
             <div
@@ -67,14 +64,12 @@ export default function NewOrder() {
           Create a New Order
         </h1>
 
-        {/* STEP 1 — Pickup & Delivery */}
         {step === 1 && (
           <div>
             <h2 className="text-lg font-semibold text-navy mb-3">
               Step 1: Pickup & Delivery
             </h2>
 
-            {/* Saved Locations Dropdown */}
             <label className="block mb-4">
               <span className="text-sm font-medium text-gray-700">
                 Use Saved Location
@@ -98,7 +93,6 @@ export default function NewOrder() {
               </select>
             </label>
 
-            {/* Pickup Location */}
             <label className="block mb-4">
               <span className="text-sm font-medium text-gray-700">
                 Pickup Location
@@ -111,7 +105,6 @@ export default function NewOrder() {
               />
             </label>
 
-            {/* Delivery Location */}
             <label className="block mb-4">
               <span className="text-sm font-medium text-gray-700">
                 Delivery Location
@@ -136,14 +129,12 @@ export default function NewOrder() {
           </div>
         )}
 
-        {/* STEP 2 — Goods Information */}
         {step === 2 && (
           <div>
             <h2 className="text-lg font-semibold text-navy mb-3">
               Step 2: Goods Information
             </h2>
 
-            {/* Goods Type */}
             <label className="block mb-4">
               <span className="text-sm font-medium text-gray-700">
                 Type of Goods
@@ -160,7 +151,6 @@ export default function NewOrder() {
               </select>
             </label>
 
-            {/* Notes */}
             <label className="block">
               <span className="text-sm font-medium text-gray-700">
                 Special Notes (Optional)
@@ -192,7 +182,6 @@ export default function NewOrder() {
           </div>
         )}
 
-        {/* STEP 3 — Review & Confirm */}
         {step === 3 && (
           <div>
             <h2 className="text-lg font-semibold text-navy mb-3">
@@ -201,12 +190,20 @@ export default function NewOrder() {
 
             <div className="bg-lightgrey p-4 rounded mb-6">
               <h3 className="font-semibold text-navy mb-2">Pickup & Delivery</h3>
-              <p><strong>Pickup:</strong> {pickupLocation}</p>
-              <p><strong>Delivery:</strong> {deliveryLocation}</p>
+              <p>
+                <strong>Pickup:</strong> {pickupLocation}
+              </p>
+              <p>
+                <strong>Delivery:</strong> {deliveryLocation}
+              </p>
 
               <h3 className="font-semibold text-navy mt-4 mb-2">Goods</h3>
-              <p><strong>Type:</strong> {goodsType}</p>
-              <p><strong>Notes:</strong> {specialNotes || "None"}</p>
+              <p>
+                <strong>Type:</strong> {goodsType}
+              </p>
+              <p>
+                <strong>Notes:</strong> {specialNotes || "None"}
+              </p>
             </div>
 
             <div className="flex justify-between mt-6">
