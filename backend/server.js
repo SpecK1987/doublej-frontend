@@ -1,7 +1,13 @@
+// backend/server.js
 import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
 import dotenv from "dotenv";
+import cors from "cors";
+import mongoose from "mongoose";
+
+import authRoutes from "./routes/authRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
+import locationRoutes from "./routes/locationRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
 
 dotenv.config();
 
@@ -10,38 +16,42 @@ const app = express();
 // Middleware
 app.use(express.json());
 
-// CORS
+// CORS – loosened so it won’t block you while you’re wiring things up
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://double-j-gulf-services.onrender.com"
-    ],
-    credentials: true,
+    origin: "*",
   })
 );
 
-// ROUTES
-import authRoutes from "./routes/authRoutes.js";
-import orderRoutes from "./routes/orderRoutes.js";
+// MongoDB connection
+const MONGO_URI = process.env.MONGO_URI;
 
-app.use("/api/auth", authRoutes);
-app.use("/api/orders", orderRoutes);
+if (!MONGO_URI) {
+  console.error("❌ MONGO_URI is not defined in environment variables");
+  process.exit(1);
+}
 
-// MongoDB
 mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
+  .connect(MONGO_URI)
+  .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => {
-    console.error("MongoDB connection error:", err);
+    console.error("❌ MongoDB connection error:", err);
     process.exit(1);
   });
 
-// Root
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/locations", locationRoutes);
+app.use("/api/profile", profileRoutes);
+
+// Health check
 app.get("/", (req, res) => {
   res.send("Double J Gulf Services API is running");
 });
 
-// Port
+// Port for Render
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
