@@ -1,63 +1,82 @@
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { Helmet } from "react-helmet-async";
 
 export default function Home() {
   return (
-    <div className="bg-lightgrey min-h-screen flex flex-col">
-      <Navbar />
+    <>
+      <Helmet>
+        <title>
+          Gulf Supply & Delivery for Boats and Platforms | Double J Gulf
+          Services
+        </title>
+        <meta
+          name="description"
+          content="Double J Gulf Services provides storage, packaging, and delivery of groceries, household products, and specialty items to boats, platforms, and local businesses across the Gulf."
+        />
+      </Helmet>
 
-      <main className="flex-1">
-        <section className="bg-navy text-white py-20">
-          <div className="max-w-5xl mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Reliable Gulf Supply for Boats, Platforms, and Local Businesses
+      <section className="bg-navy text-white py-16">
+        <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-10">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">
+              Reliable Gulf Supply & Delivery
             </h1>
-            <p className="text-lg text-lightgrey mb-8">
-              Storing, packaging, and delivering quality goods across the Gulf of America.
+            <p className="text-sm md:text-base mb-6 text-gray-200">
+              Storage, packaging, and delivery of groceries, household products,
+              and specialty items to boats, platforms, and local businesses
+              across the Gulf.
             </p>
-            <div className="space-x-4">
-              <a
-                href="/contact"
-                className="bg-primary text-navy px-6 py-3 rounded font-semibold"
-              >
-                Request a Quote
-              </a>
+            <div className="flex flex-wrap gap-3">
               <a
                 href="/services"
-                className="border border-primary text-primary px-6 py-3 rounded font-semibold"
+                className="bg-primary text-navy px-5 py-2 rounded font-semibold"
               >
                 View Services
               </a>
+              <a
+                href="/portal/login"
+                className="border border-primary text-primary px-5 py-2 rounded font-semibold"
+              >
+                Customer Portal
+              </a>
             </div>
           </div>
-        </section>
-
-        <section className="py-12">
-          <div className="max-w-5xl mx-auto px-4 grid md:grid-cols-3 gap-6">
-            {[
-              {
-                title: "Offshore Vessels & Boats",
-                text: "Provisioning and resupply for crew boats and support vessels.",
-              },
-              {
-                title: "Platforms & Oilfield Sites",
-                text: "Coordinated deliveries to platforms and oilfield locations.",
-              },
-              {
-                title: "Local Businesses",
-                text: "Reliable storage and delivery for local operations.",
-              },
-            ].map((card) => (
-              <div key={card.title} className="bg-white p-6 rounded shadow-sm">
-                <h3 className="text-lg font-bold text-navy mb-2">{card.title}</h3>
-                <p className="text-sm text-gray-700">{card.text}</p>
-              </div>
-            ))}
+          <div className="bg-lightgrey text-navy rounded-lg p-6 w-full md:w-1/2">
+            <h2 className="font-semibold mb-2">Built for Gulf Operations</h2>
+            <ul className="text-sm space-y-1">
+              <li>• Boats, platforms, and local businesses</li>
+              <li>• Time-sensitive delivery windows</li>
+              <li>• Groceries, household, and specialty items</li>
+              <li>• Clear communication and status visibility</li>
+            </ul>
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
 
-      <Footer />
-    </div>
+      <section className="py-12">
+        <div className="max-w-5xl mx-auto px-4 grid md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-lg shadow p-5">
+            <h3 className="font-semibold text-navy mb-2">Boats</h3>
+            <p className="text-sm text-gray-700">
+              Provisioning for crew boats, supply vessels, and workboats with
+              tight turnaround times.
+            </p>
+          </div>
+          <div className="bg-white rounded-lg shadow p-5">
+            <h3 className="font-semibold text-navy mb-2">Platforms</h3>
+            <p className="text-sm text-gray-700">
+              Coordinated deliveries to offshore platforms with clear timing and
+              communication.
+            </p>
+          </div>
+          <div className="bg-white rounded-lg shadow p-5">
+            <h3 className="font-semibold text-navy mb-2">Local Businesses</h3>
+            <p className="text-sm text-gray-700">
+              Storage and delivery support for local yards, docks, and
+              businesses along the Gulf.
+            </p>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
