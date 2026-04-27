@@ -1,76 +1,82 @@
 import { useEffect, useState } from "react";
-import { API, authHeader } from "../../utils/api";
+import { api } from "../../utils/api";
 
-export default function Profile() {
-  const [form, setForm] = useState({
-    name: "",
-    company: "",
-    phone: "",
-    defaultInstructions: ""
+const Profile = () => {
+  const [profile, setProfile] = useState<any>(null);
+  const [message, setMessage] = useState("");
+
+  const authHeader = () => ({
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
   });
 
   useEffect(() => {
-    (async () => {
-      const res = await fetch(`${API}/api/profile/me`, {
-        headers: authHeader()
-      });
-      const data = await res.json();
-      setForm({
-        name: data.name || "",
-        company: data.company || "",
-        phone: data.phone || "",
-        defaultInstructions: data.defaultInstructions || ""
-      });
-    })();
+    const loadProfile = async () => {
+      const res = await api.get("/api/profile", authHeader());
+      setProfile(res.data);
+    };
+
+    loadProfile();
   }, []);
 
-  const save = async () => {
-    await fetch(`${API}/api/profile/me`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", ...authHeader() },
-      body: JSON.stringify(form)
-    });
-    alert("Profile updated");
+  const updateProfile = async () => {
+    const res = await api.put(
+      "/api/profile",
+      {
+        name: profile.name,
+        email: profile.email,
+      },
+      authHeader()
+    );
+
+    setMessage("Profile updated");
   };
 
-  return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-navy mb-4">My Profile</h1>
+  if (!profile) return <p>Loading...</p>;
 
-      {["name", "company", "phone"].map((field) => (
-        <label key={field} className="block mb-4">
-          <span className="text-sm font-medium text-gray-700 capitalize">
-            {field}
-          </span>
+  return (
+    <div className="p-6 max-w-xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">My Profile</h1>
+
+      {message && (
+        <div className="bg-green-100 text-green-700 p-3 rounded mb-4">
+          {message}
+        </div>
+      )}
+
+      <div className="space-y-4">
+        <div>
+          <label className="block font-medium mb-1">Name</label>
           <input
-            className="w-full p-3 border rounded mt-1"
-            value={(form as any)[field]}
+            className="w-full border rounded px-3 py-2"
+            value={profile.name}
             onChange={(e) =>
-              setForm((f) => ({ ...f, [field]: e.target.value }))
+              setProfile({ ...profile, name: e.target.value })
             }
           />
-        </label>
-      ))}
+        </div>
 
-      <label className="block mb-4">
-        <span className="text-sm font-medium text-gray-700">
-          Default Delivery Instructions
-        </span>
-        <textarea
-          className="w-full p-3 border rounded mt-1 h-24"
-          value={form.defaultInstructions}
-          onChange={(e) =>
-            setForm((f) => ({ ...f, defaultInstructions: e.target.value }))
-          }
-        />
-      </label>
+        <div>
+          <label className="block font-medium mb-1">Email</label>
+          <input
+            className="w-full border rounded px-3 py-2"
+            value={profile.email}
+            onChange={(e) =>
+              setProfile({ ...profile, email: e.target.value })
+            }
+          />
+        </div>
 
-      <button
-        onClick={save}
-        className="bg-primary text-navy px-6 py-2 rounded font-bold"
-      >
-        Save Profile
-      </button>
+        <button
+          onClick={updateProfile}
+          className="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Save Changes
+        </button>
+      </div>
     </div>
   );
-}
+};
+
+export default Profile;
