@@ -1,116 +1,54 @@
 import { useEffect, useState } from "react";
-import { API, authHeader } from "../../utils/api";
+import { api } from "../../utils/api";
 
-interface SavedLocation {
-  label: string;
-  type: string;
-  location: string;
-}
+const SavedLocations = () => {
+  const [locations, setLocations] = useState([]);
 
-export default function SavedLocations() {
-  const [locations, setLocations] = useState<SavedLocation[]>([]);
-  const [form, setForm] = useState<SavedLocation>({
-    label: "",
-    type: "",
-    location: ""
+  const authHeader = () => ({
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
   });
 
-  const load = async () => {
-    const res = await fetch(`${API}/api/locations`, { headers: authHeader() });
-    setLocations(await res.json());
+  const loadLocations = async () => {
+    const res = await api.get("/api/locations", authHeader());
+    setLocations(res.data);
+  };
+
+  const deleteLocation = async (id: string) => {
+    await api.delete(`/api/locations/${id}`, authHeader());
+    loadLocations();
   };
 
   useEffect(() => {
-    load();
+    loadLocations();
   }, []);
 
-  const add = async () => {
-    await fetch(`${API}/api/locations`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...authHeader() },
-      body: JSON.stringify(form)
-    });
-    setForm({ label: "", type: "", location: "" });
-    load();
-  };
-
-  const remove = async (index: number) => {
-    await fetch(`${API}/api/locations/${index}`, {
-      method: "DELETE",
-      headers: authHeader()
-    });
-    load();
-  };
-
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-navy mb-4">
-        Saved Delivery Locations
-      </h1>
+    <div className="p-6 max-w-3xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Saved Locations</h1>
 
-      <div className="bg-lightgrey p-4 rounded mb-6">
-        <div className="grid md:grid-cols-3 gap-3">
-          <input
-            className="p-2 border rounded"
-            placeholder="Label (e.g. M/V Gulf Runner)"
-            value={form.label}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, label: e.target.value }))
-            }
-          />
-          <select
-            className="p-2 border rounded"
-            value={form.type}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, type: e.target.value }))
-            }
-          >
-            <option value="">Type</option>
-            <option>Boat</option>
-            <option>Platform</option>
-            <option>Business</option>
-          </select>
-          <input
-            className="p-2 border rounded"
-            placeholder="Location details"
-            value={form.location}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, location: e.target.value }))
-            }
-          />
-        </div>
-        <button
-          onClick={add}
-          className="mt-3 bg-primary text-navy px-4 py-2 rounded font-bold"
-        >
-          Add Location
-        </button>
-      </div>
+      {locations.length === 0 ? (
+        <p>No saved locations.</p>
+      ) : (
+        <div className="space-y-4">
+          {locations.map((loc: any) => (
+            <div key={loc._id} className="border p-4 rounded shadow">
+              <p><strong>{loc.label}</strong></p>
+              <p>{loc.address}</p>
 
-      <ul className="space-y-2">
-        {locations.map((loc, i) => (
-          <li
-            key={i}
-            className="flex justify-between items-center bg-white p-3 rounded shadow-sm"
-          >
-            <div>
-              <p className="font-semibold text-navy">{loc.label}</p>
-              <p className="text-xs text-gray-600">
-                {loc.type} • {loc.location}
-              </p>
+              <button
+                onClick={() => deleteLocation(loc._id)}
+                className="mt-2 bg-red-600 text-white px-3 py-1 rounded"
+              >
+                Delete
+              </button>
             </div>
-            <button
-              onClick={() => remove(i)}
-              className="text-sm text-red-500 font-semibold"
-            >
-              Remove
-            </button>
-          </li>
-        ))}
-        {locations.length === 0 && (
-          <p className="text-sm text-gray-500">No saved locations yet.</p>
-        )}
-      </ul>
+          ))}
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default SavedLocations;
