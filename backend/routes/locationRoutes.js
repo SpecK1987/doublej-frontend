@@ -1,27 +1,37 @@
+// backend/routes/locationRoutes.js
 import express from "express";
-import { protect, adminOnly } from "../middleware/authMiddleware.js";
-import User from "../models/User.js";
+import { protect } from "../middleware/authMiddleware.js";
+import Location from "../models/Location.js";
 
 const router = express.Router();
 
-router.get("/", auth, async (req, res) => {
-  const user = await User.findById(req.user.id);
-  res.json(user.savedLocations || []);
+// SAVE LOCATION
+router.post("/", protect, async (req, res) => {
+  try {
+    const location = await Location.create({
+      user: req.user._id,
+      label: req.body.label,
+      address: req.body.address,
+      lat: req.body.lat,
+      lng: req.body.lng,
+    });
+
+    res.json(location);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-router.post("/", auth, async (req, res) => {
-  const { label, type, location } = req.body;
-  const user = await User.findById(req.user.id);
-  user.savedLocations.push({ label, type, location });
-  await user.save();
-  res.json(user.savedLocations);
+// GET USER LOCATIONS
+router.get("/", protect, async (req, res) => {
+  const locations = await Location.find({ user: req.user._id });
+  res.json(locations);
 });
 
-router.delete("/:index", auth, async (req, res) => {
-  const user = await User.findById(req.user.id);
-  user.savedLocations.splice(req.params.index, 1);
-  await user.save();
-  res.json(user.savedLocations);
+// DELETE LOCATION
+router.delete("/:id", protect, async (req, res) => {
+  await Location.findOneAndDelete({ _id: req.params.id, user: req.user._id });
+  res.json({ message: "Location removed" });
 });
 
 export default router;
