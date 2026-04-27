@@ -1,4 +1,3 @@
-// backend/routes/locationRoutes.js
 import express from "express";
 import { protect } from "../middleware/authMiddleware.js";
 import Location from "../models/Location.js";
@@ -13,7 +12,7 @@ router.post("/", protect, async (req, res) => {
       label: req.body.label,
       address: req.body.address,
       lat: req.body.lat,
-      lng: req.body.lng,
+      lng: req.body.lng
     });
 
     res.json(location);
