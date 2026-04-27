@@ -1,22 +1,26 @@
+// backend/routes/profileRoutes.js
 import express from "express";
-import { protect, adminOnly } from "../middleware/authMiddleware.js";
+import { protect } from "../middleware/authMiddleware.js";
 import User from "../models/User.js";
 
 const router = express.Router();
 
-router.get("/me", auth, async (req, res) => {
-  const user = await User.findById(req.user.id).select("-password");
-  res.json(user);
+// GET PROFILE
+router.get("/", protect, async (req, res) => {
+  res.json(req.user);
 });
 
-router.put("/me", auth, async (req, res) => {
-  const { name, company, phone, defaultInstructions } = req.body;
-  const user = await User.findByIdAndUpdate(
-    req.user.id,
-    { name, company, phone, defaultInstructions },
+// UPDATE PROFILE
+router.put("/", protect, async (req, res) => {
+  const { name, email } = req.body;
+
+  const updated = await User.findByIdAndUpdate(
+    req.user._id,
+    { name, email },
     { new: true }
   ).select("-password");
-  res.json(user);
+
+  res.json(updated);
 });
 
 export default router;
