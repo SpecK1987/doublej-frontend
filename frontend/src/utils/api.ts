@@ -4,7 +4,8 @@ import axios from "axios";
 const API_BASE = "https://double-j-gulf-services.onrender.com";
 
 export const api = axios.create({
-  baseURL: API_BASE,
+  baseURL: "https://double-j-gulf-services.onrender.com",
+});
   withCredentials: false, // set true if you later use cookies
 });
 
