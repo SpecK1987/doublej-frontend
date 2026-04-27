@@ -1,4 +1,3 @@
-// backend/routes/orderRoutes.js
 import express from "express";
 import Order from "../models/Order.js";
 import { protect, adminOnly } from "../middleware/authMiddleware.js";
@@ -11,7 +10,7 @@ router.post("/", protect, async (req, res) => {
     const order = await Order.create({
       user: req.user._id,
       serviceType: req.body.serviceType,
-      description: req.body.description,
+      description: req.body.description
     });
 
     res.json(order);
