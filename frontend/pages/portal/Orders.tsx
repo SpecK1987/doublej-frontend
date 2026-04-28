@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
+import PortalLayout from "../../components/PortalLayout";
 import { api } from "../../utils/api";
 
+interface Order {
+  _id: string;
+  serviceType: string;
+  description?: string;
+  status: string;
+  createdAt: string;
+}
+
 const Orders = () => {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const authHeader = () => ({
     headers: {
@@ -12,34 +22,51 @@ const Orders = () => {
 
   useEffect(() => {
     const loadOrders = async () => {
-      const res = await api.get("/api/orders/my", authHeader());
-      setOrders(res.data);
+      try {
+        const res = await api.get("/api/orders/my", authHeader());
+        setOrders(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+      setLoading(false);
     };
 
     loadOrders();
   }, []);
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">My Orders</h1>
+    <PortalLayout>
+      <div className="max-w-3xl">
+        <h1 className="text-2xl font-bold mb-4">My Orders</h1>
 
-      {orders.length === 0 ? (
-        <p>No orders found.</p>
-      ) : (
-        <div className="space-y-4">
-          {orders.map((order: any) => (
-            <div key={order._id} className="border p-4 rounded shadow">
-              <p><strong>Service:</strong> {order.serviceType}</p>
-              <p><strong>Description:</strong> {order.description}</p>
-              <p><strong>Status:</strong> {order.status}</p>
-              <p className="text-sm text-gray-500">
-                {new Date(order.createdAt).toLocaleString()}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+        {loading ? (
+          <p>Loading...</p>
+        ) : orders.length === 0 ? (
+          <p>No orders found.</p>
+        ) : (
+          <div className="space-y-4">
+            {orders.map((order) => (
+              <div key={order._id} className="border p-4 rounded shadow">
+                <p>
+                  <strong>Service:</strong> {order.serviceType}
+                </p>
+                {order.description && (
+                  <p>
+                    <strong>Description:</strong> {order.description}
+                  </p>
+                )}
+                <p>
+                  <strong>Status:</strong> {order.status}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {new Date(order.createdAt).toLocaleString()}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </PortalLayout>
   );
 };
 
