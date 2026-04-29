@@ -1,29 +1,74 @@
-export default function Navbar() {
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+const Navbar = () => {
+  const [open, setOpen] = useState(false);
+
+  const navItems = [
+    { label: "Home", path: "/" },
+    { label: "What We Do", path: "/services" },
+    { label: "About Us", path: "/about" },
+    { label: "Contact", path: "/contact" },
+  ];
+
   return (
-    <nav className="bg-navy text-white px-8 py-4 flex justify-between items-center">
-      <a href="/" className="text-xl font-bold tracking-wide">
-        Double J Gulf Services
-      </a>
-      <div className="space-x-6 text-sm font-medium">
-        <a href="/services" className="hover:text-primary">
-          Services
-        </a>
-        <a href="/about" className="hover:text-primary">
-          About
-        </a>
-        <a href="/faq" className="hover:text-primary">
-          FAQ
-        </a>
-        <a href="/contact" className="hover:text-primary">
-          Contact
-        </a>
-        <a
-          href="/portal/login"
-          className="bg-primary text-navy px-4 py-2 rounded shadow-sm"
+    <nav className="bg-white shadow fixed w-full z-50">
+      <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+        <Link to="/" className="text-xl font-bold">
+          Double J Gulf Services
+        </Link>
+
+        <button
+          className="md:hidden text-gray-700"
+          onClick={() => setOpen(!open)}
         >
-          Customer Portal
-        </a>
+          ☰
+        </button>
+
+        <div className="hidden md:flex space-x-6">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className="hover:text-blue-600 transition"
+            >
+              {item.label}
+            </Link>
+          ))}
+
+          <Link
+            to="/portal/login"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Customer Portal
+          </Link>
+        </div>
       </div>
+
+      {open && (
+        <div className="md:hidden bg-white shadow px-4 pb-4 space-y-3">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className="block hover:text-blue-600"
+              onClick={() => setOpen(false)}
+            >
+              {item.label}
+            </Link>
+          ))}
+
+          <Link
+            to="/portal/login"
+            className="block bg-blue-600 text-white px-4 py-2 rounded text-center"
+            onClick={() => setOpen(false)}
+          >
+            Customer Portal
+          </Link>
+        </div>
+      )}
     </nav>
   );
-}
+};
+
+export default Navbar;
