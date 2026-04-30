@@ -1,14 +1,17 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Services from "./pages/Services";
+import Contact from "./pages/Contact";
+import FAQ from "./pages/FAQ";
 
-import HomePublic from "./pages/public/HomePublic";
 import Login from "./pages/portal/Login";
-import Register from "./pages/portal/Register";
-
-import Home from "./pages/portal/Home";
 import NewOrder from "./pages/portal/NewOrder";
 import Orders from "./pages/portal/Orders";
 import SavedLocations from "./pages/portal/SavedLocations";
 import Profile from "./pages/portal/Profile";
+
+import PortalLayout from "./components/PortalLayout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const token = localStorage.getItem("token");
