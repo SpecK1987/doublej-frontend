@@ -17,7 +17,6 @@ import NewOrder from "./pages/portal/NewOrder";
 import Profile from "./pages/portal/Profile";
 import SavedLocations from "./pages/portal/SavedLocations";
 
-import AdminLogin from "./pages/admin/Login";
 import AdminOrders from "./pages/admin/Orders";
 
 import ProtectedRoute from "./components/ProtectedRoute";
