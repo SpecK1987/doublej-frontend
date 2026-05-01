@@ -5,15 +5,21 @@ interface Props {
   requireAdmin?: boolean;
 }
 
-export default function ProtectedRoute({ children, requireAdmin }: Props) {
+const ProtectedRoute = ({ children, requireAdmin = false }: Props) => {
   const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
 
-  if (!token) return <Navigate to="/portal/login" replace />;
+  // Not logged in → send to login
+  if (!token) {
+    return <Navigate to="/portal/login" replace />;
+  }
 
-  if (requireAdmin && role !== "admin") {
-    return <Navigate to="/portal/orders" replace />;
+  // Logged in but not admin → block admin pages
+  if (requireAdmin && !isAdmin) {
+    return <Navigate to="/" replace />;
   }
 
   return children;
-}
+};
+
+export default ProtectedRoute;
