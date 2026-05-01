@@ -1,9 +1,9 @@
+import App from "./App";
+import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import App from "./App";
-import "./index.css";
 
 import Home from "./pages/Home";
 import Services from "./pages/Services";
