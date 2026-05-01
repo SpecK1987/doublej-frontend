@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import CommandPalette from "./components/CommandPalette";
 import { HelmetProvider } from "react-helmet-async";
 
 import "./index.css";
@@ -36,8 +37,16 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <HelmetProvider>
       <BrowserRouter>
+
+// inside JSX, near bottom of tree:
+        
+        <ToastProvider>
+           <CommandPalette />
+          <Routes>...</Routes>
+        </ToastProvider>
         <ToastProvider>
           <Routes>
+            
             {/* Public */}
             <Route path="/" element={<Home />} />
             <Route path="/services" element={<Services />} />
