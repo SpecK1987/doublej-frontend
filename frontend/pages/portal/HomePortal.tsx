@@ -3,6 +3,7 @@ import Fab from "../../components/Fab";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
 import { useToast } from "../../components/ToastProvider";
+import PageTransition from "../../components/PageTransition";
 
 const PortalHome = () => {
   const [stats, setStats] = useState({
