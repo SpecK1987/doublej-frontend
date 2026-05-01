@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 
-import App from "./App";
 import "./index.css";
 
 // Public pages
@@ -23,6 +22,7 @@ import SavedLocations from "./pages/portal/SavedLocations";
 // Admin pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminOrders from "./pages/admin/Orders";
+import Drivers from "./pages/admin/Drivers";
 
 // Route protection
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -32,7 +32,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
-          {/* Public Website */}
+          {/* Public */}
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Services />} />
           <Route path="/about" element={<About />} />
@@ -42,7 +42,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           {/* Portal Auth */}
           <Route path="/portal/login" element={<Login />} />
 
-          {/* Portal Protected Routes */}
+          {/* Portal Protected */}
           <Route
             path="/portal/orders"
             element={
@@ -79,7 +79,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             }
           />
 
-          {/* Admin Routes */}
+          {/* Admin */}
           <Route
             path="/admin"
             element={
@@ -94,6 +94,15 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             element={
               <ProtectedRoute requireAdmin>
                 <AdminOrders />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/drivers"
+            element={
+              <ProtectedRoute requireAdmin>
+                <Drivers />
               </ProtectedRoute>
             }
           />
