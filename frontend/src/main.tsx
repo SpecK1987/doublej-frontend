@@ -11,6 +11,7 @@ import Services from "./pages/Services";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
+import NotFound from "./pages/NotFound";
 
 // Portal pages
 import Login from "./pages/portal/Login";
@@ -18,6 +19,7 @@ import Orders from "./pages/portal/Orders";
 import NewOrder from "./pages/portal/NewOrder";
 import Profile from "./pages/portal/Profile";
 import SavedLocations from "./pages/portal/SavedLocations";
+import PortalHome from "./pages/portal/HomePortal";
 
 // Admin pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -27,89 +29,105 @@ import Drivers from "./pages/admin/Drivers";
 // Route protection
 import ProtectedRoute from "./components/ProtectedRoute";
 
+// Toasts
+import { ToastProvider } from "./components/ToastProvider";
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <HelmetProvider>
       <BrowserRouter>
-        <Routes>
-          {/* Public */}
-          <Route path="/" element={<Home />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/faq" element={<FAQ />} />
+        <ToastProvider>
+          <Routes>
+            {/* Public */}
+            <Route path="/" element={<Home />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/faq" element={<FAQ />} />
 
-          {/* Portal Auth */}
-          <Route path="/portal/login" element={<Login />} />
+            {/* Portal Auth */}
+            <Route path="/portal/login" element={<Login />} />
 
-          {/* Portal Protected */}
-          <Route
-            path="/portal/orders"
-            element={
-              <ProtectedRoute>
-                <Orders />
-              </ProtectedRoute>
-            }
-          />
+            {/* Portal Home / Dashboard */}
+            <Route
+              path="/portal"
+              element={
+                <ProtectedRoute>
+                  <PortalHome />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/portal/orders/new"
-            element={
-              <ProtectedRoute>
-                <NewOrder />
-              </ProtectedRoute>
-            }
-          />
+            {/* Portal Protected */}
+            <Route
+              path="/portal/orders"
+              element={
+                <ProtectedRoute>
+                  <Orders />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/portal/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/portal/orders/new"
+              element={
+                <ProtectedRoute>
+                  <NewOrder />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/portal/locations"
-            element={
-              <ProtectedRoute>
-                <SavedLocations />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/portal/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Admin */}
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute requireAdmin>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/portal/locations"
+              element={
+                <ProtectedRoute>
+                  <SavedLocations />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/admin/orders"
-            element={
-              <ProtectedRoute requireAdmin>
-                <AdminOrders />
-              </ProtectedRoute>
-            }
-          />
+            {/* Admin */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/admin/drivers"
-            element={
-              <ProtectedRoute requireAdmin>
-                <Drivers />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/admin/orders"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <AdminOrders />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+            <Route
+              path="/admin/drivers"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <Drivers />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* 404 */}
+            <Route path="/404" element={<NotFound />} />
+            <Route path="*" element={<Navigate to="/404" replace />} />
+          </Routes>
+        </ToastProvider>
       </BrowserRouter>
     </HelmetProvider>
   </React.StrictMode>
