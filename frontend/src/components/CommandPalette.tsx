@@ -82,7 +82,64 @@ export default function CommandPalette() {
       action: () => window.location.reload(),
     },
   ];
-
+  // ADMIN COMMANDS
+{
+  name: "Admin: Dashboard",
+  description: "View analytics, KPIs, and system overview",
+  category: "Admin",
+  icon: <span>📊</span>,
+  action: () => (window.location.href = "/admin"),
+},
+{
+  name: "Admin: Manage Orders",
+  description: "View, update, and assign delivery orders",
+  category: "Admin",
+  icon: <span>📦</span>,
+  action: () => (window.location.href = "/admin/orders"),
+},
+{
+  name: "Admin: Manage Drivers",
+  description: "View driver list, status, and assignments",
+  category: "Admin",
+  icon: <span>🚚</span>,
+  action: () => (window.location.href = "/admin/drivers"),
+},
+{
+  name: "Admin: Manage Users",
+  description: "View and manage customer accounts",
+  category: "Admin",
+  icon: <span>👥</span>,
+  action: () => (window.location.href = "/admin/users"),
+},
+{
+  name: "Admin: System Logs",
+  description: "View backend logs and error reports",
+  category: "Admin",
+  icon: <span>📝</span>,
+  action: () => alert("System logs UI coming soon"),
+},
+{
+  name: "Admin: Settings",
+  description: "Configure system settings and preferences",
+  category: "Admin",
+  icon: <span>⚙️</span>,
+  action: () => (window.location.href = "/admin/settings"),
+},
+{
+  name: "Admin: Maintenance Mode",
+  description: "Temporarily disable customer access",
+  category: "Admin",
+  icon: <span>🛑</span>,
+  action: () => alert("Maintenance mode coming soon"),
+},
+{
+  name: "Admin: Restart Backend",
+  description: "Trigger backend restart (placeholder)",
+  category: "Admin",
+  icon: <span>🔁</span>,
+  action: () => alert("Backend restart coming soon"),
+},
+    
   // Fuzzy search
   const filtered = commands
     .map((cmd) => ({
