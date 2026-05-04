@@ -17,7 +17,10 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "*"
+    origin: [
+      "https://doublej-frontend.onrender.com"
+    ],
+    credentials: true,
   })
 );
 
