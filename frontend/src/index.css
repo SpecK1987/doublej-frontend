@@ -12,3 +12,8 @@
 .animate-fadeIn {
   animation: fadeIn 0.15s ease-out;
 }
+
+/* Dark mode base */
+:root.dark {
+  color-scheme: dark;
+}
