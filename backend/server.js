@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
-      "https://doublej-frontend.onrender.com"
+      "doublej-frontend.vercel.app"
     ],
     credentials: true,
   })
