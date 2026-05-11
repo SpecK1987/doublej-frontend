@@ -82,6 +82,7 @@ export default function CommandPalette() {
       action: () => window.location.reload(),
     },
   ];
+
   // ADMIN COMMANDS
 {
   name: "Admin: Dashboard",
