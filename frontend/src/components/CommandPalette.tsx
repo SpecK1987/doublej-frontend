@@ -85,18 +85,18 @@ export default function CommandPalette() {
 
   // ADMIN COMMANDS
 {
-  name: "Admin: Dashboard",
-  description: "View analytics, KPIs, and system overview",
-  category: "Admin",
-  icon: <span>📊</span>,
-  action: () => (window.location.href = "/admin"),
+  name: "Admin: Dashboard";
+  description: "View analytics, KPIs, and system overview";
+  category: "Admin";
+  icon: <span>📊</span>;
+  action: () => (window.location.href = "/admin");
 },
 {
   name: "Admin: Manage Orders",
   description: "View, update, and assign delivery orders",
-  category: "Admin",
-  icon: <span>📦</span>,
-  action: () => (window.location.href = "/admin/orders"),
+  category: "Admin";
+  icon: <span>📦</span>;
+  action: () => (window.location.href = "/admin/orders");
 },
 {
   name: "Admin: Manage Drivers",
@@ -115,30 +115,30 @@ export default function CommandPalette() {
 {
   name: "Admin: System Logs",
   description: "View backend logs and error reports",
-  category: "Admin",
+  category: "Admin";
   icon: <span>📝</span>,
   action: () => alert("System logs UI coming soon"),
 },
 {
-  name: "Admin: Settings",
+  name: "Admin: Settings";
   description: "Configure system settings and preferences",
-  category: "Admin",
-  icon: <span>⚙️</span>,
+  category: "Admin";
+  icon: <span>⚙️</span>;
   action: () => (window.location.href = "/admin/settings"),
 },
 {
-  name: "Admin: Maintenance Mode",
-  description: "Temporarily disable customer access",
-  category: "Admin",
-  icon: <span>🛑</span>,
-  action: () => alert("Maintenance mode coming soon"),
+  name: "Admin: Maintenance Mode";
+  description: "Temporarily disable customer access";
+  category: "Admin";
+  icon: <span>🛑</span>;
+  action: () => alert("Maintenance mode coming soon");
 },
 {
-  name: "Admin: Restart Backend",
+  name: "Admin: Restart Backend";
   description: "Trigger backend restart (placeholder)",
-  category: "Admin",
-  icon: <span>🔁</span>,
-  action: () => alert("Backend restart coming soon"),
+  category: "Admin";
+  icon: <span>🔁</span>;
+  action: () => alert("Backend restart coming soon");
 },
     
   // Fuzzy search
