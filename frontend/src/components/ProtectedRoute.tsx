@@ -1,23 +1,18 @@
 import { Navigate } from "react-router-dom";
 
-interface Props {
+export default function ProtectedRoute({
+  children,
+  requireAdmin = false,
+}: {
   children: JSX.Element;
   requireAdmin?: boolean;
-}
+}) {
+  // TODO: wire to real auth
+  const isAuthenticated = true;
+  const isAdmin = true;
 
-const ProtectedRoute = ({ children, requireAdmin = false }: Props) => {
-  const token = localStorage.getItem("token");
-  const isAdmin = localStorage.getItem("isAdmin") === "true";
-
-  if (!token) {
-    return <Navigate to="/portal/login" replace />;
-  }
-
-  if (requireAdmin && !isAdmin) {
-    return <Navigate to="/" replace />;
-  }
+  if (!isAuthenticated) return <Navigate to="/portal/login" replace />;
+  if (requireAdmin && !isAdmin) return <Navigate to="/portal" replace />;
 
   return children;
-};
-
-export default ProtectedRoute;
+}

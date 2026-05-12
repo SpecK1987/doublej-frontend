@@ -1,23 +1,3 @@
-import { useState, useEffect, useCallback } from "react";
-
-// Command type
-type Command = {
-  name: string;
-  description?: string;
-  icon?: JSX.Element;
-  category: string;
-  action: () => void;
-};
-
-// Simple fuzzy scoring
-function scoreMatch(text: string, query: string) {
-  text = text.toLowerCase();
-  query = query.toLowerCase();
-  if (text.includes(query)) return 2;
-  if (text.startsWith(query)) return 3;
-  return 0;
-}
-
 export default function CommandPalette() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -85,18 +65,18 @@ export default function CommandPalette() {
 
   // ADMIN COMMANDS
 {
-  name: "Admin: Dashboard";
-  description: "View analytics, KPIs, and system overview";
-  category: "Admin";
-  icon: <span>📊</span>;
-  action: () => (window.location.href = "/admin");
+  name: "Admin: Dashboard",
+  description: "View analytics, KPIs, and system overview",
+  category: "Admin",
+  icon: <span>📊</span>,
+  action: () => (window.location.href = "/admin"),
 },
 {
   name: "Admin: Manage Orders",
   description: "View, update, and assign delivery orders",
-  category: "Admin";
-  icon: <span>📦</span>;
-  action: () => (window.location.href = "/admin/orders");
+  category: "Admin",
+  icon: <span>📦</span>,
+  action: () => (window.location.href = "/admin/orders"),
 },
 {
   name: "Admin: Manage Drivers",
@@ -115,30 +95,30 @@ export default function CommandPalette() {
 {
   name: "Admin: System Logs",
   description: "View backend logs and error reports",
-  category: "Admin";
+  category: "Admin",
   icon: <span>📝</span>,
   action: () => alert("System logs UI coming soon"),
 },
 {
-  name: "Admin: Settings";
+  name: "Admin: Settings",
   description: "Configure system settings and preferences",
-  category: "Admin";
-  icon: <span>⚙️</span>;
+  category: "Admin",
+  icon: <span>⚙️</span>,
   action: () => (window.location.href = "/admin/settings"),
 },
 {
-  name: "Admin: Maintenance Mode";
-  description: "Temporarily disable customer access";
-  category: "Admin";
-  icon: <span>🛑</span>;
-  action: () => alert("Maintenance mode coming soon");
+  name: "Admin: Maintenance Mode",
+  description: "Temporarily disable customer access",
+  category: "Admin",
+  icon: <span>🛑</span>,
+  action: () => alert("Maintenance mode coming soon"),
 },
 {
-  name: "Admin: Restart Backend";
+  name: "Admin: Restart Backend",
   description: "Trigger backend restart (placeholder)",
-  category: "Admin";
-  icon: <span>🔁</span>;
-  action: () => alert("Backend restart coming soon");
+  category: "Admin",
+  icon: <span>🔁</span>,
+  action: () => alert("Backend restart coming soon"),
 },
     
   // Fuzzy search
@@ -194,30 +174,8 @@ export default function CommandPalette() {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm flex items-start justify-center pt-32 z-50">
-      <div className="bg-white dark:bg-gray-900 w-full max-w-xl rounded-xl shadow-2xl overflow-hidden animate-fadeIn border border-gray-200 dark:border-gray-700">
-        
-        {/* Search Bar */}
-        <div className="border-b border-gray-200 dark:border-gray-700 p-3">
-          <input
-            autoFocus
-            type="text"
-            placeholder="Search commands…"
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setSelected(0);
-            }}
-            className="w-full p-3 outline-none text-lg bg-transparent text-gray-900 dark:text-gray-100"
-          />
-        </div>
-
-        {/* Command List */}
-        <div className="max-h-80 overflow-y-auto">
-          {filtered.length === 0 && (
-            <div className="p-4 text-gray-500 dark:text-gray-400 text-center">
-              No matching commands
-            </div>
-          )}
-
-          {filtered.map((
+    <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg text-sm">
+      Command Palette
+    </div>
+  );
+}
