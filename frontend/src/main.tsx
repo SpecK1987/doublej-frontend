@@ -27,7 +27,13 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminOrders from "./pages/admin/Orders";
 import Drivers from "./pages/admin/Drivers";
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+// Ensure the root element exists before calling createRoot
+const rootElement = document.getElementById("root");
+if (!rootElement) {
+  throw new Error('Root element with id "root" not found');
+}
+
+ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <HelmetProvider>
       <BrowserRouter>
@@ -90,7 +96,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <Route
               path="/admin"
               element={
-                <ProtectedRoute requireAdmin>
+                <ProtectedRoute requireAdmin={true}>
                   <AdminDashboard />
                 </ProtectedRoute>
               }
@@ -98,7 +104,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <Route
               path="/admin/orders"
               element={
-                <ProtectedRoute requireAdmin>
+                <ProtectedRoute requireAdmin={true}>
                   <AdminOrders />
                 </ProtectedRoute>
               }
@@ -106,7 +112,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <Route
               path="/admin/drivers"
               element={
-                <ProtectedRoute requireAdmin>
+                <ProtectedRoute requireAdmin={true}>
                   <Drivers />
                 </ProtectedRoute>
               }
