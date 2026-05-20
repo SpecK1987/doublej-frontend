@@ -1,79 +1,223 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
 
-// Merge or update items array if both files have one
-const items = [
-  { label: "Home", path: "/" },
-  { label: "Services", path: "/services" },
-  { label: "Customer Portal", path: "/portal" },
-  { label: "Admin Dashboard", path: "/admin" },
-  { label: "Orders", path: "/portal/orders" },
-  { label: "New Order", path: "/portal/orders/new" },
-  { label: "Drivers", path: "/admin/drivers" },
-];
+// Command type
+type Command = {
+  name: string;
+  description?: string;
+  icon?: JSX.Element;
+  category: string;
+  action: () => void;
+};
 
-// Add any additional logic or hooks from both files here
+// Simple fuzzy scoring
+function scoreMatch(text: string, query: string) {
+  text = text.toLowerCase();
+  query = query.toLowerCase();
+  if (text.includes(query)) return 2;
+  if (text.startsWith(query)) return 3;
+  return 0;
+}
 
-const CommandPalette: React.FC = () => {
+export default function CommandPalette() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const navigate = useNavigate();
+  const [selected, setSelected] = useState(0);
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "/" && (e.target as HTMLElement).tagName !== "INPUT") {
+  // Commands with categories + icons + descriptions
+  const commands: Command[] = [
+    // Navigation
+    {
+      name: "Go to Home",
+      description: "Return to the main landing page",
+      category: "Navigation",
+      icon: <span>🏠</span>,
+      action: () => (window.location.href = "/"),
+    },
+    {
+      name: "Customer Portal",
+      description: "Access customer dashboard and tools",
+      category: "Navigation",
+      icon: <span>👤</span>,
+      action: () => (window.location.href = "/portal"),
+    },
+    {
+      name: "Admin Dashboard",
+      description: "Manage orders, drivers, and analytics",
+      category: "Navigation",
+      icon: <span>🛠️</span>,
+      action: () => (window.location.href = "/admin"),
+    },
+
+    // Orders
+    {
+      name: "Create New Order",
+      description: "Start a new delivery order",
+      category: "Orders",
+      icon: <span>➕</span>,
+      action: () => alert("Order creation coming soon"),
+    },
+    {
+      name: "Track Order",
+      description: "Check the status of an existing order",
+      category: "Orders",
+      icon: <span>📦</span>,
+      action: () => alert("Order tracking coming soon"),
+    },
+
+    // System
+    {
+      name: "Toggle Dark Mode",
+      description: "Switch between light and dark themes",
+      category: "System",
+      icon: <span>🌙</span>,
+      action: () => {
+        document.documentElement.classList.toggle("dark");
+      },
+    },
+    {
+      name: "Reload App",
+      description: "Refresh the entire application",
+      category: "System",
+      icon: <span>🔄</span>,
+      action: () => window.location.reload(),
+    },
+  ];
+
+  // ADMIN COMMANDS
+{
+  name: "Admin: Dashboard",
+  description: "View analytics, KPIs, and system overview",
+  category: "Admin",
+  icon: <span>📊</span>,
+  action: () => (window.location.href = "/admin"),
+},
+{
+  name: "Admin: Manage Orders",
+  description: "View, update, and assign delivery orders",
+  category: "Admin",
+  icon: <span>📦</span>,
+  action: () => (window.location.href = "/admin/orders"),
+},
+{
+  name: "Admin: Manage Drivers",
+  description: "View driver list, status, and assignments",
+  category: "Admin",
+  icon: <span>🚚</span>,
+  action: () => (window.location.href = "/admin/drivers"),
+},
+{
+  name: "Admin: Manage Users",
+  description: "View and manage customer accounts",
+  category: "Admin",
+  icon: <span>👥</span>,
+  action: () => (window.location.href = "/admin/users"),
+},
+{
+  name: "Admin: System Logs",
+  description: "View backend logs and error reports",
+  category: "Admin",
+  icon: <span>📝</span>,
+  action: () => alert("System logs UI coming soon"),
+},
+{
+  name: "Admin: Settings",
+  description: "Configure system settings and preferences",
+  category: "Admin",
+  icon: <span>⚙️</span>,
+  action: () => (window.location.href = "/admin/settings"),
+},
+{
+  name: "Admin: Maintenance Mode",
+  description: "Temporarily disable customer access",
+  category: "Admin",
+  icon: <span>🛑</span>,
+  action: () => alert("Maintenance mode coming soon"),
+},
+{
+  name: "Admin: Restart Backend",
+  description: "Trigger backend restart (placeholder)",
+  category: "Admin",
+  icon: <span>🔁</span>,
+  action: () => alert("Backend restart coming soon"),
+},
+    
+  // Fuzzy search
+  const filtered = commands
+    .map((cmd) => ({
+      ...cmd,
+      score: scoreMatch(cmd.name, query) + scoreMatch(cmd.description || "", query),
+    }))
+    .filter((cmd) => cmd.score > 0 || query.length === 0)
+    .sort((a, b) => b.score - a.score);
+
+  // Keyboard controls
+  const handleKey = useCallback(
+    (e: KeyboardEvent) => {
+      // Open palette
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setOpen(true);
-      } else if (e.key === "Escape") {
+        setOpen((prev) => !prev);
+        setQuery("");
+        setSelected(0);
+      }
+
+      if (!open) return;
+
+      if (e.key === "Escape") {
         setOpen(false);
       }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, []);
 
-  const filtered = items.filter((i) =>
-    i.label.toLowerCase().includes(query.toLowerCase())
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSelected((prev) => (prev + 1 < filtered.length ? prev + 1 : prev));
+      }
+
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelected((prev) => (prev - 1 >= 0 ? prev - 1 : prev));
+      }
+
+      if (e.key === "Enter") {
+        e.preventDefault();
+        filtered[selected]?.action();
+        setOpen(false);
+      }
+    },
+    [open, filtered, selected]
   );
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [handleKey]);
 
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 bg-black/40 backdrop-blur-sm">
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-md mx-4">
-        <div className="border-b dark:border-gray-700 px-3 py-2">
+    <div className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm flex items-start justify-center pt-32 z-50">
+      <div className="bg-white dark:bg-gray-900 w-full max-w-xl rounded-xl shadow-2xl overflow-hidden animate-fadeIn border border-gray-200 dark:border-gray-700">
+        
+        {/* Search Bar */}
+        <div className="border-b border-gray-200 dark:border-gray-700 p-3">
           <input
             autoFocus
+            type="text"
+            placeholder="Search commands…"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search pages…"
-            className="w-full bg-transparent text-sm outline-none text-gray-800 dark:text-gray-100"
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSelected(0);
+            }}
+            className="w-full p-3 outline-none text-lg bg-transparent text-gray-900 dark:text-gray-100"
           />
         </div>
-        <div className="max-h-64 overflow-y-auto text-sm">
-          {filtered.length === 0 && (
-            <div className="px-3 py-2 text-gray-500">No matches.</div>
-          )}
-          {filtered.map((item) => (
-            <button
-              key={item.path}
-              onClick={() => {
-                navigate(item.path);
-                setOpen(false);
-              }}
-              className="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-100"
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-        <div className="px-3 py-2 text-[11px] text-gray-500 flex justify-between border-t dark:border-gray-700">
-          <span>Type to search. Enter to go.</span>
-          <span>/ to open • Esc to close</span>
-        </div>
-      </div>
-    </div>
-  );
-};
 
-export default CommandPalette;
+        {/* Command List */}
+        <div className="max-h-80 overflow-y-auto">
+          {filtered.length === 0 && (
+            <div className="p-4 text-gray-500 dark:text-gray-400 text-center">
+              No matching commands
+            </div>
+          )}
+
+          {filtered.map((

@@ -7,6 +7,7 @@ const PortalLayout = ({ children }: { children: React.ReactNode }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("isAdmin");
     navigate("/portal/login");
   };
 

@@ -1,14 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import CommandPalette from "./components/CommandPalette";
+
+<CommandPalette />
 import { HelmetProvider } from "react-helmet-async";
 
 import "./index.css";
 
-import CommandPalette from "./components/CommandPalette";
-import ProtectedRoute from "./components/ProtectedRoute";
-import { ToastProvider } from "./components/ToastProvider";
-
+// Public pages
 import Home from "./pages/Home";
 import Services from "./pages/Services";
 import About from "./pages/About";
@@ -16,30 +16,39 @@ import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
 import NotFound from "./pages/NotFound";
 
+// Portal pages
 import Login from "./pages/portal/Login";
 import Orders from "./pages/portal/Orders";
 import NewOrder from "./pages/portal/NewOrder";
 import Profile from "./pages/portal/Profile";
 import SavedLocations from "./pages/portal/SavedLocations";
-import HomePortal from "./pages/portal/HomePortal";
+import PortalHome from "./pages/portal/HomePortal";
 
+// Admin pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminOrders from "./pages/admin/Orders";
 import Drivers from "./pages/admin/Drivers";
 
-// Ensure the root element exists before calling createRoot
-const rootElement = document.getElementById("root");
-if (!rootElement) {
-  throw new Error('Root element with id "root" not found');
-}
+// Route protection
+import ProtectedRoute from "./components/ProtectedRoute";
 
-ReactDOM.createRoot(rootElement).render(
+// Toasts
+import { ToastProvider } from "./components/ToastProvider";
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <HelmetProvider>
       <BrowserRouter>
+
+// inside JSX, near bottom of tree:
+        
         <ToastProvider>
-          <CommandPalette />
+           <CommandPalette />
+          <Routes>...</Routes>
+        </ToastProvider>
+        <ToastProvider>
           <Routes>
+            
             {/* Public */}
             <Route path="/" element={<Home />} />
             <Route path="/services" element={<Services />} />
@@ -47,18 +56,20 @@ ReactDOM.createRoot(rootElement).render(
             <Route path="/contact" element={<Contact />} />
             <Route path="/faq" element={<FAQ />} />
 
-            {/* Portal auth */}
+            {/* Portal Auth */}
             <Route path="/portal/login" element={<Login />} />
 
-            {/* Portal protected */}
+            {/* Portal Home / Dashboard */}
             <Route
               path="/portal"
               element={
                 <ProtectedRoute>
-                  <HomePortal />
+                  <PortalHome />
                 </ProtectedRoute>
               }
             />
+
+            {/* Portal Protected */}
             <Route
               path="/portal/orders"
               element={
@@ -67,6 +78,7 @@ ReactDOM.createRoot(rootElement).render(
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/portal/orders/new"
               element={
@@ -75,6 +87,7 @@ ReactDOM.createRoot(rootElement).render(
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/portal/profile"
               element={
@@ -83,6 +96,7 @@ ReactDOM.createRoot(rootElement).render(
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/portal/locations"
               element={
@@ -96,23 +110,25 @@ ReactDOM.createRoot(rootElement).render(
             <Route
               path="/admin"
               element={
-                <ProtectedRoute requireAdmin={true}>
+                <ProtectedRoute requireAdmin>
                   <AdminDashboard />
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/admin/orders"
               element={
-                <ProtectedRoute requireAdmin={true}>
+                <ProtectedRoute requireAdmin>
                   <AdminOrders />
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/admin/drivers"
               element={
-                <ProtectedRoute requireAdmin={true}>
+                <ProtectedRoute requireAdmin>
                   <Drivers />
                 </ProtectedRoute>
               }
