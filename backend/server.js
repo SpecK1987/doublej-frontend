@@ -18,7 +18,9 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
-      "doublej-frontend.vercel.app"
+      "https://doublej-frontend.vercel.app", // old
+      "https://your-netlify-site.netlify.app", // new Netlify deploy URL
+      "http://localhost:3000" // local dev
     ],
     credentials: true,
   })
