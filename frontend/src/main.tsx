@@ -1,9 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import CommandPalette from "./components/CommandPalette";
-
-<CommandPalette />
 import { HelmetProvider } from "react-helmet-async";
 
 import "./index.css";
@@ -34,31 +31,23 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 // Toasts
 import { ToastProvider } from "./components/ToastProvider";
+import CommandPalette from "./components/CommandPalette";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <HelmetProvider>
       <BrowserRouter>
-
-// inside JSX, near bottom of tree:
-        
         <ToastProvider>
-           <CommandPalette />
-          <Routes>...</Routes>
-        </ToastProvider>
-        <ToastProvider>
+          <CommandPalette />
           <Routes>
-            
             {/* Public */}
             <Route path="/" element={<Home />} />
             <Route path="/services" element={<Services />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/faq" element={<FAQ />} />
-
             {/* Portal Auth */}
             <Route path="/portal/login" element={<Login />} />
-
             {/* Portal Home / Dashboard */}
             <Route
               path="/portal"
@@ -68,7 +57,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
                 </ProtectedRoute>
               }
             />
-
             {/* Portal Protected */}
             <Route
               path="/portal/orders"
@@ -78,7 +66,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/portal/orders/new"
               element={
@@ -87,7 +74,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/portal/profile"
               element={
@@ -96,7 +82,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/portal/locations"
               element={
@@ -105,7 +90,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
                 </ProtectedRoute>
               }
             />
-
             {/* Admin */}
             <Route
               path="/admin"
@@ -115,7 +99,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/admin/orders"
               element={
@@ -124,7 +107,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/admin/drivers"
               element={
@@ -133,7 +115,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
                 </ProtectedRoute>
               }
             />
-
             {/* 404 */}
             <Route path="/404" element={<NotFound />} />
             <Route path="*" element={<Navigate to="/404" replace />} />
