@@ -1,30 +1,30 @@
 # Deployment Guide — Double J Gulf Services
 
 ## 1. Backend Deployment (Render)
+[unchanged...]
 
-1. Push backend folder to GitHub
-2. Go to https://render.com
-3. Create a new Web Service
-4. Select your backend repo
-5. Set:
-   - Build Command: `npm install`
-   - Start Command: `node server.js`
-6. Add environment variables:
-   - `MONGO_URI=your_atlas_connection_string`
-   - `JWT_SECRET=your_secret_key`
-7. Deploy
-
-Render will give you a URL like:
-
-https://doublej-backend.onrender.com
-(doublej-backend.onrender.com on Bing)
-
-
-2. Frontend Deployment (Vercel)
+## 2. Frontend Deployment (Netlify)
 
 1. Push frontend folder to GitHub
-2. Go to https://vercel.com
-3. Create a new project
+2. Go to https://netlify.com and sign in
+3. Click "Add New Site" > "Import an existing project"
+4. Select your frontend repo
+5. In "Build command" enter: `npm run build`
+6. In "Publish directory" enter: `dist`
+7. Add environment variable:  
+   ```
+   VITEAPIURL=https://doublej-backend.onrender.com
+   ```
+8. Click "Deploy Site"
+9. After deploy, update your backend's CORS config to allow your Netlify site URL!
+
+---
+
+## 3. MongoDB Atlas Setup
+[unchanged...]
+
+## 4. Post-Deployment Checklist
+[unchanged...]3. Create a new project
 4. Select your frontend repo
 5. Add environment variable:
 `
